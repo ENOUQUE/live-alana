@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live VIP - Acesso Exclusivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff2d55;
+            --primary-glow: rgba(255, 45, 85, 0.5);
+            --bg: #0a0a0c;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Responsive Background Animation */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--primary-glow) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(88, 101, 242, 0.3) 0%, transparent 40%);
+            filter: blur(80px);
+            opacity: 0.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem 1rem;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .profile-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(45deg, var(--primary), #5865f2);
+            box-shadow: 0 0 20px var(--primary-glow);
+            object-fit: cover;
+        }
+
+        .status-badge {
+            position: absolute;
+            bottom: 5px;
+            right: calc(50% - 55px);
+            background: #ff2d55;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid var(--bg);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bio {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .link-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 1.2rem;
+            border-radius: 16px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .link-card:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .link-card.vip {
+            background: linear-gradient(45deg, #ff2d55, #ff6b6b);
+            border: none;
+            box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
+        }
+
+        /* Scarcity / Social Proof */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 3rem;
+            background: var(--glass);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-item h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .stat-item p {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 1.5rem 1rem; }
+            .profile-img { width: 100px; height: 100px; }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <div class="profile-container">
+            <img src="https://via.placeholder.com/150" id="profile-pic" class="profile-img" alt="Profile">
+            <div class="status-badge">AO VIVO</div>
+        </div>
+
+        <h1>@VIP_Exclusivo</h1>
+        <p class="bio">🔥 Conteúdo exclusivo que você não encontra em nenhum outro lugar. <br>Acesso vitalício à sala VIP.</p>
+
+        <div class="links">
+            <a href="vip.html" class="link-card vip">
+                ⭐ ENTRAR NA SALA VIP AGORA
+            </a>
+            <a href="#" class="link-card">
+                📸 Instagram Secundário
+            </a>
+            <a href="#" class="link-card">
+                💬 Telegram de Avisos
+            </a>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <h3 id="users-count">2.4k</h3>
+                <p>Membros VIP</p>
+            </div>
+            <div class="stat-item">
+                <h3>421</h3>
+                <p>Fotos/Vídeos</p>
+            </div>
+            <div class="stat-item">
+                <h3>99%</h3>
+                <p>Satisfeitos</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Live VIP App. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        // Dynamic user count simulation
+        let count = 2412;
+        setInterval(() => {
+            if (Math.random() > 0.5) {
+                count += Math.floor(Math.random() * 2);
+                document.getElementById('users-count').innerText = (count / 1000).toFixed(1) + 'k';
+            }
+        }, 3000);
+
+        // Fetch placeholder or actual image
+        // In a real scenario, this would be updated via admin panel
+    </script>
+</body>
+</html>
