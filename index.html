@@ -67,7 +67,7 @@
 
         <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[35vh] md:h-full z-30">
             <div class="p-4 border-b border-white/10 flex justify-between items-center bg-black/20">
-                <span class="text-xs font-bold uppercase tracking-widest text-pink-500">Coment�rios VIP</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-pink-500">Comentários VIP</span>
                 <span class="text-[10px] text-gray-500">Apenas Assinantes</span>
             </div>
 
@@ -91,24 +91,44 @@
     </div>
 
     <div id="sale-popup"
-        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[90%] max-w-[340px] animate__animated animate__zoomIn">
+        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[90%] max-w-[380px] animate__animated animate__zoomIn">
         <div class="bg-white text-black p-0 rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.6)]">
-            <div class="bg-pink-600 p-4 text-white text-center">
-                <p class="text-[10px] uppercase font-bold tracking-[3px]">Acesso VIP Liberado</p>
+            <div class="bg-pink-600 p-3 text-white text-center">
+                <p class="text-[11px] uppercase font-bold tracking-[2px]">💥 PROMOÇÃO NO AR 💥</p>
             </div>
-            <div class="p-8 text-center">
-                <h3 class="text-3xl font-black italic mb-2 tracking-tighter uppercase text-pink-600">SALA PRIVADA</h3>
-                <p class="text-gray-600 text-sm mb-6 leading-tight font-medium">Voc� foi selecionado para entrar na sala
-                    sem censura. <br><b>Restam apenas 3 vagas.</b></p>
+            <div class="p-6 text-center">
+                <h3 class="text-xl font-black italic mb-2 tracking-tighter uppercase text-pink-600">🌸 TABELA DA Carolzinha 🌸</h3>
+                <p class="text-gray-600 text-[13px] mb-5 leading-tight font-medium">
+                    💥 E hoje tem PROMOÇÃO, amor!<br>
+                    💥 Olha só o que preparei pra você 👇
+                </p>
 
-                <button onclick="iniciarCheckout()" id="btn-comprar"
-                    class="w-full bg-pink-600 text-white font-black py-4 px-6 rounded-xl block text-lg shadow-xl hover:scale-105 active:scale-95 transition-all uppercase italic tracking-tighter">
-                    ?? ENTRAR AGORA
-                </button>
+                <div class="space-y-3 mb-5 text-left">
+                    <!-- Pacote Pink -->
+                    <button onclick="iniciarCheckout(this)" class="w-full bg-pink-50 border border-pink-200 p-4 rounded-xl hover:scale-105 transition-transform flex flex-col items-center justify-center relative overflow-hidden group">
+                        <div class="text-pink-600 font-black text-lg mb-1">🔹 Pacote Pink</div>
+                        <div class="text-[13px] text-gray-700 font-medium mb-2">📸 30 fotos + 20 vídeos</div>
+                        <div class="bg-pink-600 text-white text-sm font-black px-6 py-1.5 rounded-full">💰 Por apenas R$10,00</div>
+                    </button>
 
-                <div class="mt-4 flex justify-center items-center space-x-2 grayscale opacity-50">
+                    <!-- Pacote Delírio -->
+                    <button onclick="iniciarCheckout(this)" class="w-full bg-purple-50 border border-purple-200 p-4 rounded-xl hover:scale-105 transition-transform flex flex-col items-center justify-center relative overflow-hidden">
+                        <div class="text-purple-600 font-black text-lg mb-1">😈 Pacote Delírio 😈</div>
+                        <div class="text-[13px] text-gray-700 font-medium mb-2">📸 75 fotos + 60 vídeos</div>
+                        <div class="bg-purple-600 text-white text-sm font-black px-6 py-1.5 rounded-full">💰 Por apenas R$15,00</div>
+                    </button>
+
+                    <!-- Pacote VIP -->
+                    <button onclick="iniciarCheckout(this)" class="w-full bg-yellow-50 border border-yellow-300 p-4 rounded-xl hover:scale-105 transition-transform flex flex-col items-center justify-center relative overflow-hidden">
+                        <div class="text-yellow-600 font-black text-lg mb-1">👑 Pacote VIP 👑</div>
+                        <div class="text-[13px] text-gray-700 font-medium mb-2">📸 100 fotos + 100 vídeos</div>
+                        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-sm font-black px-6 py-1.5 rounded-full shadow-md">💰 Apenas R$30,00</div>
+                    </button>
+                </div>
+
+                <div class="flex justify-center items-center space-x-2 grayscale opacity-50">
                     <img src="https://logospng.org/download/pix/logo-pix-1024.png" class="h-4">
-                    <span class="text-[10px] font-bold tracking-tighter">LIBERA��O IMEDIATA</span>
+                    <span class="text-[10px] font-bold tracking-tighter">LIBERAÇÃO IMEDIATA</span>
                 </div>
             </div>
         </div>
@@ -121,8 +141,36 @@
         const viewerCount = document.getElementById('viewer-count');
         const salePopup = document.getElementById('sale-popup');
 
-        const nomes = ["Marcelo_X", "Gugu_22", "Pai_da_Facul", "VIP_User", "Moreno_Top", "Carlinhos", "User99", "Marcos_Br", "Nando_VIP"];
-        const mensagens = ["Eitaaa ??", "Como faz pra entrar no VIP?", "Algu�m j� pagou o pix?", "Essa live t� demais!", "Nossa senhora...", "Mandei o pix agora!", "Me aceita l� no grupo!", "Top demais ??", "J� estou l� na sala!", "A Alana � perfeita"];
+        const nomes = [
+            "Marcelo_X", "Gugu_22", "Pai_da_Facul", "VIP_User", "Moreno_Top", "Carlinhos", "User99", "Marcos_Br", "Nando_VIP",
+            "João_Vitor", "Pedro_H", "Lucas_M", "Gabriel_99", "Mateus_Silva", "Rafael_Costa", "Felipe_Gamer", "Thiago_Oliveira",
+            "Bruno_Souza", "Diego_F", "Gustavo_Lima", "Rodrigo_Alves", "Caio_Julio", "Vitor_Hugo", "Eduardo_P", "Luan_Santana_Fake",
+            "Matheus_G", "Vinicius_T", "Renato_VIP", "Carlos_Eduardo", "Arthur_Rei", "Fernando_S", "Alex_andre", "Marcos_Paulo",
+            "Robson_Top", "Fabricio_X", "Igor_123", "Kleber_M", "Leandro_F", "Mauricio_BR", "Nilton_C", "Otavio_M", "Pablo_Escobar_BR",
+            "Renan_P", "Samuel_V", "Tadeu_G", "Ubirata_Silva", "Valdir_P", "Wagner_M", "Xavier_T", "Yuri_G", "Zeca_P", "Ricardinho",
+            "Vanderson", "Muleque_Doido", "O_Cara", "Mestre_Cuca", "GuerreiroZ", "Ninja_BR", "Lobo_Solitario", "Cachorro_Louco",
+            "Safadao_99", "Rei_Delas", "Magnata_VIP"
+        ];
+        const mensagens = [
+            "Eitaaa 🔥🔥🔥", "Como faz pra comprar?", "Alguém já comprou o pacote?", "Essa live tá demais!", "Nossa senhora...", 
+            "Comprei o pacote VIP agora!", "Me aceita lá no grupo!", "Top demais 😈", "Já estou lá na sala!", "A Carolzinha é perfeita",
+            "Comprei o pacote Delírio e não me arrependo! 🥵", "Vale cada centavo, rapaziada!", "Alguém me empresta R$30 aí? 😅",
+            "Pagamento aprovado aqui, só no aguardo 😈", "Que mulher, meu Deus! 😍", "O pacote Pink tá muito barato 😱",
+            "Já vi uma prévia e tô doido pra ver o resto", "Carolzinha, me nota!", "Peguei o VIP! Agora é só aproveitar 😎",
+            "Vocês não tem noção do que tem nesse pacote VIP 🤯", "Tô na dúvida entre o Delírio e o VIP...", 
+            "Sério, melhor investimento da semana hahaha", "Acho que vou pegar o Pink pra testar 🔥", "Gente, os vídeos são Full HD mesmo? 👀",
+            "Acabou de cair o acesso aqui, meu Deus! 🤤", "Misericórdia! Que conteúdo top! 👏", "Fazendo o pix agora mesmo...",
+            "Qualquer um dos pacotes vale a pena, sério", "Carolzona maravilhosa ❤️‍🔥", "Não acredito que paguei só 30 reais nisso",
+            "Onde eu clico pra comprar? Sumiu aqui", "Peguei o VIP pra não perder nada 😈", "Tá travando pra alguém ou é só aqui?",
+            "Tô no 4G só pra assistir haha", "Alguém divide o pacote comigo? 😂", "Isso sim é promoção de verdade! 💥",
+            "Meu Deus a última foto do pacote VIP... 🥵🥵", "Nunca comprei antes, mas dessa vez não resisti", "Carol, você é um espetáculo de mulher!",
+            "Já comprei umas 3 vezes conteúdos dela, nunca decepciona 💯", "O pacote Pink já me deixou louco, imagina o VIP", 
+            "Avisa lá no grupo que a live tá on", "Meu cartão não passou, vou fazer Pix! 💸", "Chegando agora, alguém resume o que tá rolando?",
+            "Essa tabela salvou minha noite rs", "Comprei o pacote Delírio! Os vídeos tão insanos! 😈", "Ela responde no direct do VIP?",
+            "Ansioso demais pra ver o pacote de 100 fotos", "Galera, não percam, acabei de abrir aqui e tá 10/10 😍", "Eu avisei que hoje ia ser brabo 🔥",
+            "Qual pacote vcs recomendam pra quem tá liso? 😂", "Pix feito! Cadê meu acesso? 👀", "Libera logo Carol", 
+            "Muito deusa pqp...", "Se soubesse que era tão bom tinha comprado antes"
+        ];
 
         function toggleMute() {
             if (video.muted) {
@@ -147,11 +195,12 @@
             viewerCount.innerText = (current + change).toLocaleString('pt-BR');
         }
 
-        // L�gica de Checkout e Integra��o
-        async function iniciarCheckout() {
-            const btn = document.getElementById('btn-comprar');
-            btn.innerHTML = `<span class="animate-pulse">VERIFICANDO VAGA...</span>`;
-            btn.disabled = true;
+        // Lógica de Checkout e Integração
+        async function iniciarCheckout(btn) {
+            if(btn) {
+                btn.innerHTML = `<span class="animate-pulse">PROCESSANDO...</span>`;
+                btn.disabled = true;
+            }
 
             try {
                 // 1. Notifica o n8n sobre o clique (Gera Lead/Pix)
