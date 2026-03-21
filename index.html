@@ -55,6 +55,9 @@
                     type="video/mp4">
             </video>
 
+            <!-- Áudio de fundo -->
+            <audio id="bgMusic" src="musica-nova.m4a" loop></audio>
+
             <button id="unmuteBtn" onclick="toggleMute()"
                 class="absolute bottom-24 left-6 z-50 bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/30 animate-bounce">
                 <svg id="muteIcon" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,6 +179,13 @@
             if (video.muted) {
                 video.muted = false;
                 unmuteBtn.classList.add('hidden');
+                
+                // Toca a música de fundo (precisa do arquivo musica-nova.m4a na mesma pasta)
+                const bgMusic = document.getElementById('bgMusic');
+                if (bgMusic) {
+                    bgMusic.volume = 0.4;
+                    bgMusic.play().catch(e => console.log("Áudio bloqueado pelo navegador", e));
+                }
             }
         }
 
