@@ -13,8 +13,12 @@
             backdrop-filter: blur(15px);
         }
 
-        .chat-container::-webkit-scrollbar {
+        .chat-container::-webkit-scrollbar, .scrollbar-hide::-webkit-scrollbar {
             display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
         }
 
         video {
@@ -27,7 +31,7 @@
     </style>
 </head>
 
-<body class="bg-black text-white font-sans overflow-hidden h-screen">
+<body class="bg-black text-white font-sans overflow-hidden h-[100dvh]">
 
     <div class="relative h-full w-full flex flex-col md:flex-row">
 
@@ -68,7 +72,7 @@
             </button>
         </div>
 
-        <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[35vh] md:h-full z-30">
+        <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[40dvh] md:h-full z-30 shrink-0">
             <div class="p-4 border-b border-white/10 flex justify-between items-center bg-black/20">
                 <span class="text-xs font-bold uppercase tracking-widest text-pink-500">Comentários VIP</span>
                 <span class="text-[10px] text-gray-500">Apenas Assinantes</span>
@@ -94,7 +98,7 @@
     </div>
 
     <div id="sale-popup"
-        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[90%] max-w-[380px] animate__animated animate__zoomIn">
+        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[90%] max-w-[380px] max-h-[95dvh] overflow-y-auto scrollbar-hide animate__animated animate__zoomIn">
         <div class="bg-white text-black p-0 rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.6)]">
             <div class="bg-pink-600 p-3 text-white text-center">
                 <p class="text-[11px] uppercase font-bold tracking-[2px]">💥 PROMOÇÃO NO AR 💥</p>
