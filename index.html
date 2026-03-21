@@ -72,21 +72,26 @@
             </button>
         </div>
 
-        <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[40dvh] md:h-full z-30 shrink-0">
-            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-black/20">
-                <span class="text-xs font-bold uppercase tracking-widest text-pink-500">Comentários VIP</span>
-                <span class="text-[10px] text-gray-500">Apenas Assinantes</span>
+        <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[30dvh] md:h-full z-30 shrink-0">
+            <!-- Botão fixo de compra -->
+            <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-2.5 text-white font-black text-[11px] uppercase tracking-widest flex justify-center items-center shadow-md animate-pulse z-40 relative">
+                🔥 VER TABELA DE PREÇOS 🔥
+            </button>
+            <div class="p-2 border-b border-white/10 flex justify-between items-center bg-black/20">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-pink-500">Comentários VIP</span>
+                <span class="text-[8px] text-gray-500">Apenas Assinantes</span>
             </div>
 
             <div id="chat-box"
                 class="flex-1 overflow-y-auto p-4 space-y-3 chat-container flex flex-col-reverse bg-gradient-to-b from-transparent to-black/40">
             </div>
 
-            <div class="p-4 bg-black/60 backdrop-blur-xl border-t border-white/10">
+            <div class="p-4 bg-black/60 backdrop-blur-xl border-t border-white/10 shrink-0">
                 <div class="relative">
-                    <input type="text" placeholder="Envie sua mensagem..."
-                        class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-pink-500 transition-colors">
-                    <button class="absolute right-3 top-2 text-pink-500 font-bold p-1">
+                    <input type="text" id="chat-input" placeholder="Envie sua mensagem..."
+                        class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-pink-500 transition-colors pr-12"
+                        onkeypress="if(event.key === 'Enter') enviarMensagem()">
+                    <button onclick="enviarMensagem()" class="absolute right-2 top-1.5 text-pink-500 font-bold p-1 hover:text-pink-400 hover:scale-110 transition-transform cursor-pointer">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
@@ -98,44 +103,45 @@
     </div>
 
     <div id="sale-popup"
-        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[90%] max-w-[380px] max-h-[95dvh] overflow-y-auto scrollbar-hide animate__animated animate__zoomIn">
-        <div class="bg-white text-black p-0 rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.6)]">
-            <div class="bg-pink-600 p-3 text-white text-center">
-                <p class="text-[11px] uppercase font-bold tracking-[2px]">💥 PROMOÇÃO NO AR 💥</p>
+        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[85%] max-w-[320px] max-h-[90dvh] overflow-y-auto scrollbar-hide animate__animated animate__zoomIn">
+        <div class="bg-white text-black p-0 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(236,72,153,0.5)] border-2 border-pink-500">
+            <div class="bg-pink-600 p-2 text-white text-center relative">
+                <p class="text-[9px] uppercase font-bold tracking-widest">💥 PROMOÇÃO NO AR 💥</p>
+                <button onclick="fecharPopup()" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white font-black text-sm">✕</button>
             </div>
-            <div class="p-6 text-center">
-                <h3 class="text-xl font-black italic mb-2 tracking-tighter uppercase text-pink-600">🌸 TABELA DA Carolzinha 🌸</h3>
-                <p class="text-gray-600 text-[13px] mb-5 leading-tight font-medium">
-                    💥 E hoje tem PROMOÇÃO, amor!<br>
-                    💥 Olha só o que preparei pra você 👇
+            <div class="p-4 text-center">
+                <h3 class="text-sm font-black italic mb-0 tracking-tighter uppercase text-pink-600">🌸 TABELA Carolzinha 🌸</h3>
+                <p class="text-gray-600 text-[10px] mb-3 leading-tight font-medium">
+                    💥 Olha só o que preparei 👇
                 </p>
 
-                <div class="space-y-3 mb-5 text-left">
+                <div class="space-y-2 text-left">
                     <!-- Pacote Pink -->
-                    <button onclick="iniciarCheckout(this)" class="w-full bg-pink-50 border border-pink-200 p-4 rounded-xl hover:scale-105 transition-transform flex flex-col items-center justify-center relative overflow-hidden group">
-                        <div class="text-pink-600 font-black text-lg mb-1">🔹 Pacote Pink</div>
-                        <div class="text-[13px] text-gray-700 font-medium mb-2">📸 30 fotos + 20 vídeos</div>
-                        <div class="bg-pink-600 text-white text-sm font-black px-6 py-1.5 rounded-full">💰 Por apenas R$10,00</div>
+                    <button onclick="iniciarCheckout(this)" class="w-full bg-pink-50 border border-pink-200 p-1.5 rounded-lg hover:bg-pink-100 flex items-center justify-between">
+                        <div class="text-left px-1">
+                            <div class="text-pink-600 font-extrabold text-[12px] leading-tight">🔹 Pacote Pink</div>
+                            <div class="text-[9px] text-gray-700 font-bold leading-tight mt-0.5">📸 30 fotos<br>🎥 20 vídeos</div>
+                        </div>
+                        <div class="bg-pink-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full whitespace-nowrap">R$ 10,00</div>
                     </button>
 
                     <!-- Pacote Delírio -->
-                    <button onclick="iniciarCheckout(this)" class="w-full bg-purple-50 border border-purple-200 p-4 rounded-xl hover:scale-105 transition-transform flex flex-col items-center justify-center relative overflow-hidden">
-                        <div class="text-purple-600 font-black text-lg mb-1">😈 Pacote Delírio 😈</div>
-                        <div class="text-[13px] text-gray-700 font-medium mb-2">📸 75 fotos + 60 vídeos</div>
-                        <div class="bg-purple-600 text-white text-sm font-black px-6 py-1.5 rounded-full">💰 Por apenas R$15,00</div>
+                    <button onclick="iniciarCheckout(this)" class="w-full bg-purple-50 border border-purple-200 p-1.5 rounded-lg hover:bg-purple-100 flex items-center justify-between">
+                        <div class="text-left px-1">
+                            <div class="text-purple-600 font-extrabold text-[12px] leading-tight">😈 Pacote Delírio</div>
+                            <div class="text-[9px] text-gray-700 font-bold leading-tight mt-0.5">📸 75 fotos<br>🎥 60 vídeos</div>
+                        </div>
+                        <div class="bg-purple-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full whitespace-nowrap">R$ 15,00</div>
                     </button>
 
                     <!-- Pacote VIP -->
-                    <button onclick="iniciarCheckout(this)" class="w-full bg-yellow-50 border border-yellow-300 p-4 rounded-xl hover:scale-105 transition-transform flex flex-col items-center justify-center relative overflow-hidden">
-                        <div class="text-yellow-600 font-black text-lg mb-1">👑 Pacote VIP 👑</div>
-                        <div class="text-[13px] text-gray-700 font-medium mb-2">📸 100 fotos + 100 vídeos</div>
-                        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-sm font-black px-6 py-1.5 rounded-full shadow-md">💰 Apenas R$30,00</div>
+                    <button onclick="iniciarCheckout(this)" class="w-full bg-yellow-50 border border-yellow-300 p-1.5 rounded-lg hover:bg-yellow-100 flex items-center justify-between shadow-sm">
+                        <div class="text-left px-1">
+                            <div class="text-yellow-600 font-extrabold text-[12px] leading-tight">👑 Pacote VIP</div>
+                            <div class="text-[9px] text-gray-700 font-bold leading-tight mt-0.5">📸 100 fotos<br>🎥 100 vídeos</div>
+                        </div>
+                        <div class="bg-yellow-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-md whitespace-nowrap">R$ 30,00</div>
                     </button>
-                </div>
-
-                <div class="flex justify-center items-center space-x-2 grayscale opacity-50">
-                    <img src="https://logospng.org/download/pix/logo-pix-1024.png" class="h-4">
-                    <span class="text-[10px] font-bold tracking-tighter">LIBERAÇÃO IMEDIATA</span>
                 </div>
             </div>
         </div>
@@ -203,6 +209,27 @@
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
         }
 
+        let meuNome = "";
+        function enviarMensagem() {
+            const input = document.getElementById('chat-input');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            if (!meuNome) {
+                meuNome = prompt("Como você quer ser chamado na live?");
+                if (!meuNome) meuNome = "Visitante";
+            }
+
+            const div = document.createElement('div');
+            div.className = 'animate__animated animate__fadeInUp bg-pink-600/30 border border-pink-500/50 p-2 rounded-lg';
+            div.innerHTML = `<span class="text-pink-300 font-bold text-[11px]">@${meuNome.toLowerCase()} (Você)</span><p class="text-sm text-white font-medium leading-tight">${txt}</p>`;
+            chatBox.prepend(div);
+            
+            if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
+            
+            input.value = "";
+        }
+
         function updateViewers() {
             let current = parseInt(viewerCount.innerText.replace('.', ''));
             let change = Math.floor(Math.random() * 20) - 10;
@@ -243,9 +270,54 @@
         setInterval(updateViewers, 3000);
 
         // POP-UP AP�S 12 SEGUNDOS
-        setTimeout(() => {
-            salePopup.classList.remove('hidden');
+        let loopTimers = [];
+        let isLooping = true; // Permite desativar loop quando clicado pelo usuario
+
+        function togglePopup() {
+            if (salePopup.classList.contains('hidden') || salePopup.classList.contains('animate__zoomOut')) {
+                // Clique manual: abre e pausa o loop escondido
+                isLooping = false;
+                loopTimers.forEach(t => clearTimeout(t));
+                salePopup.classList.remove('hidden', 'animate__zoomOut');
+                salePopup.classList.add('animate__zoomIn');
+            } else {
+                fecharPopup();
+            }
+        }
+
+        function fecharPopup() {
+            salePopup.classList.replace('animate__zoomIn', 'animate__zoomOut');
+            setTimeout(() => {
+                salePopup.classList.add('hidden');
+            }, 500); 
+        }
+
+        function popupLoop() {
+            if(!isLooping) return;
+            // Abre o pop-up
+            if (salePopup.classList.contains('hidden') || salePopup.classList.contains('animate__zoomOut')) {
+                salePopup.classList.remove('hidden', 'animate__zoomOut');
+                salePopup.classList.add('animate__zoomIn');
+            }
+            
+            // Fecha após 20 segundos
+            let t1 = setTimeout(() => {
+                if(isLooping) fecharPopup();
+                
+                // Recomeça ciclo após 35 segundos fechado
+                let t2 = setTimeout(() => {
+                    popupLoop();
+                }, 35000);
+                loopTimers.push(t2);
+            }, 20000);
+            loopTimers.push(t1);
+        }
+
+        // Inicia ciclo de pop up 12s apos carregamento
+        let initialT = setTimeout(() => {
+            if(isLooping) popupLoop();
         }, 12000);
+        loopTimers.push(initialT);
     </script>
 </body>
 
