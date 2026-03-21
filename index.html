@@ -1,251 +1,189 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live VIP - Acesso Exclusivo</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>LIVE EXCLUSIVA - @LIVE_VIP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-        :root {
-            --primary: #ff2d55;
-            --primary-glow: rgba(255, 45, 85, 0.5);
-            --bg: #0a0a0c;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
-            --text-dim: #a0a0a0;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+        .glass {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
+        .chat-container::-webkit-scrollbar {
+            display: none;
         }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        video {
+            pointer-events: none;
         }
 
-        /* Responsive Background Animation */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 30%, var(--primary-glow) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(88, 101, 242, 0.3) 0%, transparent 40%);
-            filter: blur(80px);
-            opacity: 0.6;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem 1rem;
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .profile-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            padding: 4px;
-            background: linear-gradient(45deg, var(--primary), #5865f2);
-            box-shadow: 0 0 20px var(--primary-glow);
-            object-fit: cover;
-        }
-
-        .status-badge {
-            position: absolute;
-            bottom: 5px;
-            right: calc(50% - 55px);
-            background: #ff2d55;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 2px solid var(--bg);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
-            100% { transform: scale(1); }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #fff, #a0a0a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .bio {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-        }
-
-        .links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 100%;
-        }
-
-        .link-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 1.2rem;
-            border-radius: 16px;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .link-card:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 25px var(--primary-glow);
-        }
-
-        .link-card.vip {
-            background: linear-gradient(45deg, #ff2d55, #ff6b6b);
-            border: none;
-            box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
-        }
-
-        /* Scarcity / Social Proof */
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 3rem;
-            background: var(--glass);
-            padding: 1.5rem;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .stat-item h3 {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .stat-item p {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-        }
-
-        /* Mobile specific adjustments */
-        @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
-            .container { padding: 1.5rem 1rem; }
-            .profile-img { width: 100px; height: 100px; }
-        }
-
-        /* Footer */
-        footer {
-            margin-top: auto;
-            padding: 2rem;
-            font-size: 0.8rem;
-            color: var(--text-dim);
+        .btn-gradient {
+            background: linear-gradient(90deg, #db2777 0%, #7c3aed 100%);
         }
     </style>
 </head>
-<body>
-    <div class="bg-glow"></div>
 
-    <div class="container">
-        <div class="profile-container">
-            <img src="https://via.placeholder.com/150" id="profile-pic" class="profile-img" alt="Profile">
-            <div class="status-badge">AO VIVO</div>
+<body class="bg-black text-white font-sans overflow-hidden h-screen">
+
+    <div class="relative h-full w-full flex flex-col md:flex-row">
+
+        <div class="relative flex-1 bg-black flex items-center justify-center overflow-hidden">
+            <div class="absolute top-6 left-6 z-40 flex flex-col space-y-2">
+                <div class="flex items-center space-x-2">
+                    <span class="bg-red-600 px-3 py-1 rounded-sm text-[10px] font-black animate-pulse shadow-lg">AO
+                        VIVO</span>
+                    <span
+                        class="bg-black/60 px-3 py-1 rounded-sm text-[10px] flex items-center backdrop-blur-md border border-white/10">
+                        <svg class="w-3 h-3 mr-1.5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path fill-rule="evenodd"
+                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span id="viewer-count" class="font-mono">14.829</span>
+                    </span>
+                </div>
+            </div>
+
+            <video id="mainVideo" class="h-full w-full object-contain md:object-cover" autoplay muted loop playsinline>
+                <source
+                    src="https://s3gt.previas.shop/instagram/v2%20%E2%80%90%20Feito%20com%20o%20Clipchamp%20(36).mp4"
+                    type="video/mp4">
+            </video>
+
+            <button id="unmuteBtn" onclick="toggleMute()"
+                class="absolute bottom-24 left-6 z-50 bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/30 animate-bounce">
+                <svg id="muteIcon" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z">
+                    </path>
+                </svg>
+            </button>
         </div>
 
-        <h1>@VIP_Exclusivo</h1>
-        <p class="bio">🔥 Conteúdo exclusivo que você não encontra em nenhum outro lugar. <br>Acesso vitalício à sala VIP.</p>
-
-        <div class="links">
-            <a href="vip.html" class="link-card vip">
-                ⭐ ENTRAR NA SALA VIP AGORA
-            </a>
-            <a href="#" class="link-card">
-                📸 Instagram Secundário
-            </a>
-            <a href="#" class="link-card">
-                💬 Telegram de Avisos
-            </a>
-        </div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <h3 id="users-count">2.4k</h3>
-                <p>Membros VIP</p>
+        <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[35vh] md:h-full z-30">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-black/20">
+                <span class="text-xs font-bold uppercase tracking-widest text-pink-500">Coment�rios VIP</span>
+                <span class="text-[10px] text-gray-500">Apenas Assinantes</span>
             </div>
-            <div class="stat-item">
-                <h3>421</h3>
-                <p>Fotos/Vídeos</p>
+
+            <div id="chat-box"
+                class="flex-1 overflow-y-auto p-4 space-y-3 chat-container flex flex-col-reverse bg-gradient-to-b from-transparent to-black/40">
             </div>
-            <div class="stat-item">
-                <h3>99%</h3>
-                <p>Satisfeitos</p>
+
+            <div class="p-4 bg-black/60 backdrop-blur-xl border-t border-white/10">
+                <div class="relative">
+                    <input type="text" placeholder="Envie sua mensagem..."
+                        class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-pink-500 transition-colors">
+                    <button class="absolute right-3 top-2 text-pink-500 font-bold p-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>
-        &copy; 2026 Live VIP App. Todos os direitos reservados.
-    </footer>
+    <div id="sale-popup"
+        class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[90%] max-w-[340px] animate__animated animate__zoomIn">
+        <div class="bg-white text-black p-0 rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.6)]">
+            <div class="bg-pink-600 p-4 text-white text-center">
+                <p class="text-[10px] uppercase font-bold tracking-[3px]">Acesso VIP Liberado</p>
+            </div>
+            <div class="p-8 text-center">
+                <h3 class="text-3xl font-black italic mb-2 tracking-tighter uppercase text-pink-600">SALA PRIVADA</h3>
+                <p class="text-gray-600 text-sm mb-6 leading-tight font-medium">Voc� foi selecionado para entrar na sala
+                    sem censura. <br><b>Restam apenas 3 vagas.</b></p>
+
+                <button onclick="iniciarCheckout()" id="btn-comprar"
+                    class="w-full bg-pink-600 text-white font-black py-4 px-6 rounded-xl block text-lg shadow-xl hover:scale-105 active:scale-95 transition-all uppercase italic tracking-tighter">
+                    ?? ENTRAR AGORA
+                </button>
+
+                <div class="mt-4 flex justify-center items-center space-x-2 grayscale opacity-50">
+                    <img src="https://logospng.org/download/pix/logo-pix-1024.png" class="h-4">
+                    <span class="text-[10px] font-bold tracking-tighter">LIBERA��O IMEDIATA</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Dynamic user count simulation
-        let count = 2412;
-        setInterval(() => {
-            if (Math.random() > 0.5) {
-                count += Math.floor(Math.random() * 2);
-                document.getElementById('users-count').innerText = (count / 1000).toFixed(1) + 'k';
-            }
-        }, 3000);
+        const chatBox = document.getElementById('chat-box');
+        const video = document.getElementById('mainVideo');
+        const unmuteBtn = document.getElementById('unmuteBtn');
+        const viewerCount = document.getElementById('viewer-count');
+        const salePopup = document.getElementById('sale-popup');
 
-        // Fetch placeholder or actual image
-        // In a real scenario, this would be updated via admin panel
+        const nomes = ["Marcelo_X", "Gugu_22", "Pai_da_Facul", "VIP_User", "Moreno_Top", "Carlinhos", "User99", "Marcos_Br", "Nando_VIP"];
+        const mensagens = ["Eitaaa ??", "Como faz pra entrar no VIP?", "Algu�m j� pagou o pix?", "Essa live t� demais!", "Nossa senhora...", "Mandei o pix agora!", "Me aceita l� no grupo!", "Top demais ??", "J� estou l� na sala!", "A Alana � perfeita"];
+
+        function toggleMute() {
+            if (video.muted) {
+                video.muted = false;
+                unmuteBtn.classList.add('hidden');
+            }
+        }
+
+        function addMessage() {
+            const nome = nomes[Math.floor(Math.random() * nomes.length)];
+            const msg = mensagens[Math.floor(Math.random() * mensagens.length)];
+            const div = document.createElement('div');
+            div.className = 'animate__animated animate__fadeInUp bg-white/5 p-2 rounded-lg';
+            div.innerHTML = `<span class="text-pink-500 font-bold text-[11px]">@${nome.toLowerCase()}</span><p class="text-sm text-gray-200 leading-tight">${msg}</p>`;
+            chatBox.prepend(div);
+            if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
+        }
+
+        function updateViewers() {
+            let current = parseInt(viewerCount.innerText.replace('.', ''));
+            let change = Math.floor(Math.random() * 20) - 10;
+            viewerCount.innerText = (current + change).toLocaleString('pt-BR');
+        }
+
+        // L�gica de Checkout e Integra��o
+        async function iniciarCheckout() {
+            const btn = document.getElementById('btn-comprar');
+            btn.innerHTML = `<span class="animate-pulse">VERIFICANDO VAGA...</span>`;
+            btn.disabled = true;
+
+            try {
+                // 1. Notifica o n8n sobre o clique (Gera Lead/Pix)
+                fetch('https://webhook.previas.shop/webhook/webhook-gerar-pix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        instancia: 'pluszap',
+                        origem: 'Live_VIP_Hot',
+                        url_entrega: 'https://alana-valentine.vercel.app/'
+                    })
+                });
+
+                // 2. Pequeno delay para "fingir" processamento real
+                setTimeout(() => {
+                    // Redireciona para o gerador de PIX da EFI na Vercel
+                    window.location.href = "https://carolvip.vercel.app/";
+                }, 1500);
+
+            } catch (e) {
+                window.location.href = "https://carolvip.vercel.app/";
+            }
+        }
+
+        setInterval(addMessage, 1800);
+        setInterval(updateViewers, 3000);
+
+        // POP-UP AP�S 12 SEGUNDOS
+        setTimeout(() => {
+            salePopup.classList.remove('hidden');
+        }, 12000);
     </script>
 </body>
+
 </html>
