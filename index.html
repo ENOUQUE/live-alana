@@ -21,6 +21,12 @@
             scrollbar-width: none; /* Firefox */
         }
 
+        /* Efeito de sumir sutilmente para cima (TikTok / Instagram) */
+        .mask-image-top {
+            -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
+            mask-image: linear-gradient(to top, black 80%, transparent 100%);
+        }
+
         video {
             pointer-events: none;
         }
@@ -53,7 +59,8 @@
                 </div>
             </div>
 
-            <video id="mainVideo" class="h-full w-full object-contain" loop playsinline autoplay muted preload="auto">
+            <!-- Usando object-cover no celular para preencher a tela inteira (visão melhor) e object-contain no PC -->
+            <video id="mainVideo" class="h-full w-full object-cover md:object-contain" loop playsinline autoplay muted preload="auto">
                 <source
                     src="https://s3gt.previas.shop/instagram/v2%20%E2%80%90%20Feito%20com%20o%20Clipchamp%20(36).mp4"
                     type="video/mp4">
@@ -72,31 +79,48 @@
             </button>
         </div>
 
-        <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[30dvh] md:h-full z-30 shrink-0">
-            <!-- Botão fixo de compra (Atualizado para focar em CLIQUES) -->
-            <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-3 text-white font-black text-[12px] uppercase tracking-widest flex justify-center items-center shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-pulse z-40 relative border-b-2 border-pink-400 transition-all hover:scale-[1.02]">
-                👉 CLIQUE AQUI: VER TABELA VIP 👈
-            </button>
-            <div class="p-2 border-b border-white/10 flex justify-between items-center bg-black/20">
+        <!-- Painel de Chat em Overlay transparente no mobile (estilo TikTok/Insta) e lateral sólida no PC -->
+        <div class="w-full md:w-80 lg:w-96 absolute md:relative bottom-0 left-0 flex flex-col justify-end h-[65dvh] md:h-full z-30 shrink-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent md:bg-black/80 md:bg-none md:backdrop-blur-xl md:border-l md:border-white/10 pointer-events-none md:pointer-events-auto">
+            
+            <div class="pointer-events-auto w-full px-3 pb-1 md:px-0 md:pb-0 w-full drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                <!-- Botão VIP - visível e clicável -->
+                <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-2.5 md:p-3 rounded-lg md:rounded-none text-white font-black text-[12px] md:text-[12px] uppercase tracking-widest flex justify-center items-center shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-pulse z-40 relative border md:border-b-2 border-pink-400/60 transition-all hover:scale-[1.02]">
+                    👉 CLIQUE AQUI: VER TABELA VIP 👈
+                </button>
+            </div>
+
+            <div class="p-2 border-b border-white/10 flex justify-between items-center bg-black/20 hidden md:flex pointer-events-auto">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-pink-500">Comentários VIP</span>
                 <span class="text-[8px] text-gray-500">Apenas Assinantes</span>
             </div>
 
+            <!-- Caixa de rolagem com pointer events liberados para permitir deslizar os comentários -->
             <div id="chat-box"
-                class="flex-1 overflow-y-auto p-4 space-y-3 chat-container flex flex-col-reverse bg-gradient-to-b from-transparent to-black/40">
+                class="flex-1 overflow-y-auto px-3 py-2 md:p-4 space-y-1.5 chat-container flex flex-col-reverse md:bg-gradient-to-b md:from-transparent md:to-black/40 pointer-events-auto w-full mask-image-top">
             </div>
 
-            <div class="p-4 bg-black/60 backdrop-blur-xl border-t border-white/10 shrink-0">
-                <div class="relative">
-                    <input type="text" id="chat-input" placeholder="Envie sua mensagem..."
-                        class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-5 text-sm outline-none focus:border-pink-500 transition-colors pr-12"
-                        onkeypress="if(event.key === 'Enter') enviarMensagem()">
-                    <button onclick="enviarMensagem()" class="absolute right-2 top-1.5 text-pink-500 font-bold p-1 hover:text-pink-400 hover:scale-110 transition-transform cursor-pointer">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                        </svg>
-                    </button>
+            <!-- Barra inferior estilo TikTok c/ Inputs e Emojis -->
+            <div class="p-2 pb-4 md:p-4 bg-transparent md:bg-black/60 md:backdrop-blur-xl border-t-0 md:border-t md:border-white/10 shrink-0 w-full pointer-events-auto pb-safe">
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1">
+                        <input type="text" id="chat-input" placeholder="Adicionar comentário..."
+                            class="w-full bg-black/40 border border-white/20 rounded-full py-2.5 px-4 pr-10 text-xs md:text-sm text-white outline-none focus:border-pink-500 transition-colors backdrop-blur-sm shadow-inner placeholder-white/80"
+                            onkeypress="if(event.key === 'Enter') enviarMensagem()">
+                        <button onclick="enviarMensagem()" class="absolute right-1 top-1.5 text-pink-500 font-bold p-1 hover:text-pink-400 hover:scale-110 transition-transform cursor-pointer">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Componentes Visuais Puros Imitação Live -->
+                    <div class="flex items-center gap-2 pr-1 shrink-0">
+                        <button class="p-1.5 hover:scale-125 transition-transform duration-200" onclick="enviarCurtiu()">
+                            <svg class="w-6 h-6 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)] animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                        </button>
+                        <button class="p-1 px-0.5 hover:scale-125 transition-transform duration-200">
+                            <svg class="w-6 h-6 text-yellow-400 drop-shadow-md" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clip-rule="evenodd"></path><path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z"></path></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -243,8 +267,9 @@
             const nome = nomes[Math.floor(Math.random() * nomes.length)];
             const msg = mensagens[Math.floor(Math.random() * mensagens.length)];
             const div = document.createElement('div');
-            div.className = 'animate__animated animate__fadeInUp bg-white/5 p-2 rounded-lg';
-            div.innerHTML = `<span class="text-pink-500 font-bold text-[11px]">@${nome.toLowerCase()}</span><p class="text-sm text-gray-200 leading-tight">${msg}</p>`;
+            // Estilo transparente tipo TikTok (sem fundo sólido), com layout limpo e direto
+            div.className = 'animate__animated animate__fadeInUp animate__faster text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] pb-0.5 leading-tight w-full break-words';
+            div.innerHTML = `<span class="text-white/60 font-bold text-[12px] mr-1.5 drop-shadow-md tracking-tight">${nome.toLowerCase()}:</span><span class="text-[13px] text-white font-medium drop-shadow-lg">${msg}</span>`;
             chatBox.prepend(div);
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
 
@@ -289,13 +314,23 @@
             }
         }
 
-        // Função reutilizável para a Carolzinha responder (estilo VIP/Admin)
+        // Função reutilizável para a Carolzinha responder (estilo VIP/Admin Host do TikTok)
         function enviarRespostaCarolzinha(mensagem) {
             const divResp = document.createElement('div');
-            divResp.className = 'animate__animated animate__fadeInUp bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-400/50 p-2 rounded-lg shadow-[0_0_15px_rgba(236,72,153,0.15)]';
-            divResp.innerHTML = `<span class="text-pink-400 font-extrabold text-[12px] flex items-center gap-1">👑 Carolzinha <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></span><p class="text-sm text-pink-100 font-bold leading-tight mt-0.5">${mensagem}</p>`;
+            divResp.className = 'animate__animated animate__fadeInUp animate__faster drop-shadow-[0_2px_5px_rgba(0,0,0,0.9)] pb-1 pt-0.5 w-full break-words';
+            divResp.innerHTML = `<span class="inline-flex items-center gap-0.5 text-pink-400 font-extrabold text-[12px] mr-1 bg-black/30 px-1.5 py-0.5 rounded-md border border-pink-500/30 shadow-inner">👑 Carol <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></span> <span class="text-[13px] text-pink-50 font-bold drop-shadow-md leading-tight">${mensagem}</span>`;
             chatBox.prepend(divResp);
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
+        }
+
+        // Simulador de corações igual nas lives oficiais
+        function enviarCurtiu() {
+            const wrapper = document.getElementById('chat-box').parentElement;
+            const heart = document.createElement('div');
+            heart.innerHTML = "❤️";
+            heart.className = "absolute bottom-20 right-6 text-3xl animate__animated animate__fadeOutUp animate__slow z-[60] pointer-events-none drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]";
+            wrapper.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
         }
 
         let meuNome = "";
@@ -310,8 +345,8 @@
             }
 
             const div = document.createElement('div');
-            div.className = 'animate__animated animate__fadeInUp bg-pink-600/30 border border-pink-500/50 p-2 rounded-lg';
-            div.innerHTML = `<span class="text-pink-300 font-bold text-[11px]">@${meuNome.toLowerCase()} (Você)</span><p class="text-sm text-white font-medium leading-tight">${txt}</p>`;
+            div.className = 'animate__animated animate__fadeInUp animate__faster text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] pb-0.5 leading-tight w-full break-words';
+            div.innerHTML = `<span class="text-pink-400 font-extrabold text-[12px] mr-1.5 drop-shadow-md tracking-tight">${meuNome.toLowerCase()} (Você):</span><span class="text-[13px] text-pink-100 font-medium drop-shadow-lg">${txt}</span>`;
             chatBox.prepend(div);
             
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
@@ -450,15 +485,9 @@
                 let playP = bgMusic.play();
                 if(playP !== undefined) playP.catch(()=>{});
                 
-                // ANTI-TRAVAMENTO: Se o celular (iOS/Android) tentar bloquear ou pausar a música sozinho
-                // enquanto a live estiver rolando... essa armadilha dá "play" e força a volta automaticamente!
-                bgMusic.onpause = function() {
-                    const modal = document.getElementById('lead-modal');
-                    if(modal && (modal.classList.contains('animate__fadeOut') || modal.classList.contains('hidden'))) {
-                        let forceP = bgMusic.play();
-                        if(forceP !== undefined) forceP.catch(()=>{});
-                    }
-                };
+                // Removida a armadilha de recuo (onpause) que estava causando o bug
+                // do áudio tremendo/travando no iOS quando tocava junto do vídeo!
+                bgMusic.onpause = null; 
             }
             // ======================================================
 
@@ -544,13 +573,7 @@
                 const bgMusic = document.getElementById('bgMusic');
                 if (bgMusic) {
                     bgMusic.volume = 0.4;
-                    bgMusic.onpause = function() {
-                        const modal = document.getElementById('lead-modal');
-                        if(modal && (modal.classList.contains('animate__fadeOut') || modal.classList.contains('hidden'))) {
-                            let forceP = bgMusic.play();
-                            if(forceP !== undefined) forceP.catch(()=>{});
-                        }
-                    };
+                    bgMusic.onpause = null; // Removido o onpause para anular o conflito de áudio travando
                     let mPlay = bgMusic.play();
                     if(mPlay !== undefined) mPlay.catch(()=>{});
                 }
