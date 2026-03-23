@@ -16,6 +16,16 @@
         .chat-container::-webkit-scrollbar, .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
+        
+        /* Animação dos Emojis Estilo TikTok/Coracoes subindo */
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.6) rotate(-5deg); opacity: 0; }
+            15% { opacity: 1; transform: translateY(-15px) scale(1.1) rotate(5deg); }
+            100% { transform: translateY(-280px) scale(1.3) rotate(-15deg); opacity: 0; }
+        }
+        .animate-float-up {
+            animation: floatUp 2.8s ease-out forwards;
+        }
         .scrollbar-hide {
             -ms-overflow-style: none; /* IE and Edge */
             scrollbar-width: none; /* Firefox */
@@ -70,11 +80,14 @@
         <!-- PAINEL DO CHAT SOBREPOSTO (Overlapping estilo Instagram/Tiktok) -->
         <div class="absolute bottom-0 left-0 w-full md:relative md:w-80 lg:w-96 bg-gradient-to-t from-black/95 via-black/60 to-transparent md:bg-none md:glass md:border-l border-white/10 flex flex-col h-[58dvh] md:h-full z-30 shrink-0 pointer-events-none md:pointer-events-auto pb-safe">
             
-            <div class="mt-auto flex flex-col h-full pointer-events-auto pt-12 md:pt-0">
-                <!-- Botão de preços flutuante estilo TikTok -->
-                <button onclick="togglePopup()" class="w-[90%] md:w-full mx-auto md:mx-0 mb-3 md:mb-0 rounded-[10px] md:rounded-none bg-gradient-to-r from-pink-600 to-purple-600 p-3.5 text-white font-black text-[13px] uppercase tracking-widest flex justify-center items-center shadow-[0_4px_25px_rgba(236,72,153,0.6)] animate-pulse z-40 relative border-b-[3px] border-pink-400 transition-all hover:scale-[1.02]">
-                    👉 CLIQUE AQUI: VER TABELA VIP 👈
+            <div class="mt-auto flex flex-col h-full pointer-events-auto pt-12 md:pt-0 relative">
+                <!-- Botão de preços movido BEM PARA CIMA para não tampar a Cara/Corpo no vídeo celular! -->
+                <button onclick="togglePopup()" class="fixed top-[13vh] left-1/2 -translate-x-1/2 w-[88%] md:static md:translate-x-0 md:w-full mx-auto md:mx-0 mb-3 md:mb-0 rounded-full md:rounded-none bg-gradient-to-r from-pink-600 to-purple-600 p-3.5 text-white font-black text-[13px] uppercase tracking-widest flex justify-center items-center shadow-[0_4px_30px_rgba(236,72,153,0.7)] animate-pulse z-[100] border-b-[3px] border-pink-400 transition-all hover:scale-[1.02]">
+                    🔥 CLIQUE AQUI: VER TABELA VIP 🔥
                 </button>
+
+                <!-- Área Mágica onde sobem os Corações e Emojis TikTok -->
+                <div id="floating-emojis" class="absolute bottom-20 right-2 w-12 h-64 z-[60] pointer-events-none"></div>
                 
                 <div class="px-3 py-1.5 md:border-b border-white/10 flex justify-between items-center bg-black/30 md:bg-black/20 rounded-t-2xl md:rounded-none mx-2 md:mx-0 backdrop-blur-sm mt-1">
                     <span class="text-[10px] font-extrabold uppercase tracking-widest text-pink-500 [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">Comentários VIP</span>
@@ -548,6 +561,30 @@
             }
         });
         // ==============================================================================
+
+        // ====== EFEITOS ESPECIAIS (CURTIDAS INFINITAS ESTILO TIKTOK) ======
+        function soltarCoracao() {
+            const container = document.getElementById('floating-emojis');
+            // Só exibe se já encerrou a tela preta de cadastro (só na live mesmo)
+            if(!container || document.getElementById('lead-modal').className.indexOf('hidden') === -1) return;
+
+            const coracao = document.createElement('div');
+            const emojis = ['❤️', '🔥', '💖', '😍', '💦', '💕', '🥰', '🌹', '🎁'];
+            coracao.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+
+            coracao.className = 'absolute bottom-0 text-[26px] animate-float-up opacity-0 drop-shadow-lg';
+            const leftOffset = Math.random() * 26 - 13;
+            coracao.style.left = `calc(50% + ${leftOffset}px)`;
+            
+            container.appendChild(coracao);
+
+            // Elimina as sujeiras da tela após a animação acabar pra não travar o celular com o tempo
+            setTimeout(() => { if(coracao.parentNode) coracao.remove(); }, 2800);
+        }
+        
+        // Ativa turbina de curtidas automáticas pulsando infinitamente no lado direito
+        setInterval(() => { if(Math.random() > 0.35) soltarCoracao(); }, 400);
+        // =================================================================
     </script>
 </body>
 
