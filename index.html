@@ -43,15 +43,16 @@
 
 <body class="bg-black text-white font-sans overflow-hidden h-[100dvh]">
 
-    <!-- LAYOUT ATUALIZADO: Estilo Imersivo Tiktok/IG Live (Fundo total Celular) -->
-    <div class="relative h-[100dvh] w-full flex flex-col md:flex-row overflow-hidden bg-black">
+    <!-- REVERTIDO: LAYOUT BASE ORIGINAL (Telas Divídas / Split-Screen pura) sem NADA por cima do vídeo! -->
+    <div class="relative h-[100dvh] w-full flex flex-col md:flex-row bg-black overflow-hidden">
 
-        <!-- PAINEL DE VÍDEO (No Celular é fixado como fundo da tela inteira, no PC é lado esquerdo) -->
-        <div class="absolute inset-0 md:relative md:flex-1 bg-black flex items-center justify-center overflow-hidden z-0">
-            <div class="absolute top-6 left-4 md:left-6 z-40 flex flex-col space-y-2">
+        <!-- PAINEL DE VÍDEO (Metade Superior 100% Livre) -->
+        <div id="video-container" class="relative flex-1 bg-black flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-white/20 z-0">
+            
+            <div class="absolute top-4 left-4 z-40 flex flex-col space-y-2">
                 <div class="flex items-center space-x-2">
-                    <span class="bg-red-600 px-3 py-1 rounded-full text-[10px] font-black animate-pulse shadow-lg">AO VIVO</span>
-                    <span class="bg-black/50 px-3 py-1 rounded-full text-[10px] flex items-center backdrop-blur-md border border-white/10">
+                    <span class="bg-red-600 px-3 py-1 rounded-sm text-[10px] font-black animate-pulse shadow-lg">AO VIVO</span>
+                    <span class="bg-black/60 px-3 py-1 rounded-sm text-[10px] flex items-center backdrop-blur-md border border-white/10">
                         <svg class="w-3 h-3 mr-1.5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
@@ -61,71 +62,73 @@
                 </div>
             </div>
 
-            <!-- Video gigante sem barras pretas no mobile (object-cover) -->
-            <video id="mainVideo" class="h-full w-full object-cover md:object-contain" loop playsinline autoplay muted preload="auto">
+            <!-- Video original contido inteiro (object-contain) -->
+            <video id="mainVideo" class="h-full w-full object-contain" loop playsinline autoplay muted preload="auto">
                 <source src="https://s3gt.previas.shop/instagram/v2%20%E2%80%90%20Feito%20com%20o%20Clipchamp%20(36).mp4" type="video/mp4">
             </video>
 
             <!-- Áudio de fundo -->
             <audio id="bgMusic" src="musica-nova.m4a" loop preload="auto"></audio>
 
-            <!-- Botão de som MUDADO PARA O TOPO DIREITO para ficar bem longe do botão VIP central -->
-            <button id="unmuteBtn" onclick="toggleMute()" class="absolute top-6 right-4 md:top-auto md:bottom-24 md:left-6 z-50 bg-black/50 p-2.5 rounded-full backdrop-blur-md border border-white/30 animate-bounce">
+            <!-- Botão de som (Original Location no Vídeo no canto esquerdo) -->
+            <button id="unmuteBtn" onclick="toggleMute()" class="absolute bottom-6 md:bottom-24 left-4 md:left-6 z-50 bg-black/50 p-2.5 rounded-full backdrop-blur-md border border-white/30 animate-bounce">
                 <svg id="muteIcon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
                 </svg>
             </button>
             
-            <!-- Botão de Abrir Chat (Fica transparente e invisível até a pessoa escolher ver só o vídeo da Live nas antigas) -->
-            <button id="btn-toggle-chat" onclick="abrirChat()" class="absolute bottom-6 left-4 z-40 bg-black/60 p-3.5 rounded-full backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 pointer-events-none md:hidden">
-                <svg class="w-6 h-6 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                <span class="text-[10px] font-black uppercase tracking-wider">Comentar no VIP</span>
+            <!-- Botão de Abrir Chat (Aparece no vídeo só se minimizar) -->
+            <button id="btn-toggle-chat" onclick="abrirChat()" class="absolute bottom-6 right-4 z-40 bg-black/60 p-3 rounded-full backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 pointer-events-none md:hidden">
+                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                <span class="text-[10px] font-black uppercase tracking-wider">Bate-Papo</span>
             </button>
         </div>
 
-        <!-- PAINEL DO CHAT SOBREPOSTO (Ajustado para 40dvh no celular para ficar mais BAIXO e igual ao tiktok/insta) -->
-        <div id="chat-panel" class="absolute bottom-0 left-0 w-full md:relative md:w-80 lg:w-96 bg-gradient-to-t from-black/95 via-black/60 to-transparent md:bg-none md:glass md:border-l border-white/10 flex flex-col h-[40dvh] md:h-full z-30 shrink-0 pointer-events-none md:pointer-events-auto pb-safe transition-all duration-500 transform translate-y-0 opacity-100">
+        <!-- PAINEL DO CHAT FÍSICO ABAIXO DO VÍDEO (A Base Original Exata!) -->
+        <div id="chat-panel" class="relative w-full md:w-80 lg:w-96 bg-[#0a0a0a] md:glass flex flex-col h-[48dvh] md:h-full z-30 shrink-0 transition-all duration-500 transform translate-y-0 opacity-100">
             
-            <div class="mt-auto flex flex-col h-full pointer-events-auto pt-8 md:pt-0 relative">
-                <!-- Botão de preços movido BEM PARA CIMA para não tampar a Cara/Corpo no vídeo celular! -->
-                <button onclick="togglePopup()" class="fixed top-[13vh] left-1/2 -translate-x-1/2 w-[88%] md:static md:translate-x-0 md:w-full mx-auto md:mx-0 mb-3 md:mb-0 rounded-full md:rounded-none bg-gradient-to-r from-pink-600 to-purple-600 p-3.5 text-white font-black text-[13px] uppercase tracking-widest flex justify-center items-center shadow-[0_4px_30px_rgba(236,72,153,0.7)] animate-pulse z-[100] border-b-[3px] border-pink-400 transition-all hover:scale-[1.02]">
-                    🔥 CLIQUE AQUI: VER TABELA VIP 🔥
+            <!-- Área Mágica dos Emojis -->
+            <div id="floating-emojis" class="absolute bottom-20 right-2 w-12 h-56 z-[60] pointer-events-none"></div>
+
+            <!-- Botão de preços CAIU PARA CIMA DA ÁREA DO CHAT, como na sua Base Original! Sem tampar vídeo! -->
+            <div class="relative shrink-0 z-40 bg-black">
+                <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-3.5 text-white font-black text-[12px] uppercase tracking-widest flex justify-center items-center shadow-md animate-pulse">
+                    👉 CLIQUE AQUI: VER TABELA VIP 👈
                 </button>
-
-                <!-- Área Mágica onde sobem os Corações e Emojis TikTok -->
-                <div id="floating-emojis" class="absolute bottom-20 right-2 w-12 h-64 z-[60] pointer-events-none"></div>
-                
-                <div class="px-3 py-1.5 md:border-b border-white/10 flex justify-between items-center bg-black/30 md:bg-black/20 rounded-t-2xl md:rounded-none mx-2 md:mx-0 backdrop-blur-sm mt-1">
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-pink-500 [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">Comentários VIP</span>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[8px] text-gray-300 font-bold bg-black/40 px-2 py-0.5 rounded-full">Apenas Assinantes</span>
-                        <!-- Botão Minimizar Chat (Câmera Limpa Pura) -->
-                        <button onclick="fecharChat()" class="text-gray-300 hover:text-white bg-black/60 hover:bg-black/80 rounded-full w-5 h-5 flex items-center justify-center transition-colors shadow-sm cursor-pointer md:hidden">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                    </div>
+            </div>
+            
+            <div class="px-3 py-2.5 border-b border-white/5 flex justify-between items-center bg-[#111] shrink-0">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-pink-500">Comentários VIP</span>
+                <div class="flex items-center gap-2">
+                    <span class="text-[8px] text-gray-400 font-bold border border-gray-700/50 px-2 py-0.5 rounded-sm">Apenas Assinantes</span>
+                    <button onclick="fecharChat()" class="text-gray-400 hover:text-white bg-black rounded-sm w-6 h-6 flex items-center justify-center transition-colors md:hidden border border-white/10" title="Esconder Chat">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
                 </div>
+            </div>
 
-                <!-- Chat não é espremido mais -->
-                <div id="chat-box" class="flex-1 overflow-y-auto px-4 pb-2 space-y-3 pt-0 chat-container flex flex-col-reverse md:bg-gradient-to-b from-transparent to-black/40 [text-shadow:_0_1px_3px_rgb(0_0_0_/_100%)]">
-                </div>
+            <!-- Chat Container Livre -->
+            <div id="chat-box" class="flex-1 overflow-y-auto px-3 py-2 space-y-2 chat-container flex flex-col-reverse bg-gradient-to-b from-[#0a0a0a] to-[#111]">
+            </div>
 
-                <!-- Campo de digitar super amigável para dedos Gordinhos -->
-                <div class="px-4 py-3 md:p-4 bg-transparent md:bg-black/60 shrink-0 pb-5 md:pb-4 border-t border-white/5 md:border-t-white/10">
-                    <div class="relative flex items-center w-full drop-shadow-2xl">
+            <!-- Campo de digitar Base -->
+            <div class="p-3 bg-[#111] shrink-0 border-t border-white/5 pb-5">
+                <div class="relative flex items-center w-full gap-2">
+                    <div class="relative flex-1">
                         <input type="text" id="chat-input" placeholder="Adicionar comentário..."
-                            class="w-full bg-black/60 md:bg-white/5 backdrop-blur-xl border border-white/20 md:border-white/10 rounded-full py-3 pl-5 pr-14 text-[14px] md:text-[15px] font-medium outline-none focus:border-pink-500 transition-colors text-white placeholder-gray-300 shadow-inner"
+                            class="w-full bg-[#0a0a0a] border border-white/10 rounded-full py-2.5 pl-4 pr-11 text-[14px] outline-none focus:border-pink-500 transition-colors text-white placeholder-gray-500 shadow-inner"
                             onkeypress="if(event.key === 'Enter') enviarMensagem()">
-                        <button onclick="enviarMensagem()" class="absolute right-[56px] md:right-[60px] p-2.5 text-pink-400 hover:text-pink-300 hover:scale-110 transition-transform cursor-pointer bg-transparent rounded-full flex items-center justify-center">
-                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <button onclick="enviarMensagem()" class="absolute right-1 top-1/2 -translate-y-1/2 text-pink-500 p-2 hover:text-pink-400 transition-transform bg-transparent" title="Enviar Mensagem">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                             </svg>
                         </button>
-                        <!-- Botão de curtir ativo para o Usuário da Live Estilo IG -->
-                        <button onclick="usuarioCurtiu()" class="ml-2 bg-pink-600/30 border border-pink-500/50 text-white rounded-full p-2.5 hover:scale-110 transition-transform flex items-center justify-center shadow-[0_0_15px_rgba(236,72,153,0.4)] shrink-0 w-11 h-11">
-                            <span class="text-xl">❤️</span>
-                        </button>
                     </div>
+                    
+                    <!-- Botão Coração Exclusivo -->
+                    <button onclick="usuarioCurtiu()" title="Curtir Live" class="bg-[#111] border border-pink-500/30 text-white rounded-full hover:scale-110 transition-transform flex items-center justify-center shrink-0 h-10 w-10 shadow-[0_0_10px_rgba(236,72,153,0.15)]">
+                        <span class="text-lg leading-none mt-0.5">❤️</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -439,16 +442,16 @@
                 salePopup.classList.add('animate__zoomIn');
             }
             
-            // Fecha após 20 segundos
+            // Fecha após 7 segundos rápidos para não irritar
             let t1 = setTimeout(() => {
                 if(isLooping) fecharPopup();
                 
-                // Recomeça ciclo após 35 segundos fechado
+                // Recomeça ciclo após 55 segundos fechado (Respiro muito longo na tela)
                 let t2 = setTimeout(() => {
                     popupLoop();
-                }, 35000);
+                }, 55000);
                 loopTimers.push(t2);
-            }, 20000);
+            }, 7000);
             loopTimers.push(t1);
         }
 
@@ -520,10 +523,10 @@
                     enviarRespostaCarolzinha(`Oiiii @${meuNome.toLowerCase()}!! Acabei de ver que você entrou! Que delícia ter você na minha Live VIP amor! Fica bem à vontade tá? 🔥😈`);
                 }, 2000);
 
-                // Inicia ciclo de pop up 12s apos entrar
+                // Inicia ciclo de pop up 35s apos entrar (Dá bastante tempo pra pessoa curtir a sala primeiro)
                 let initialT = setTimeout(() => {
                     if(isLooping) popupLoop();
-                }, 12000);
+                }, 35000);
                 loopTimers.push(initialT);
 
             }, 500);
@@ -537,10 +540,10 @@
                 if (leadModal) leadModal.classList.add('hidden'); // Oculta o formulário imediatamente
                 if (unmuteBtn) unmuteBtn.classList.add('hidden');
                 
-                // Reinicia ciclo de popups de vendas mais pausado
+                // Reinicia ciclo de popups de vendas respeitando o tempo de folga gigante (35s)
                 setTimeout(() => {
                     if(isLooping) popupLoop();
-                }, 25000);
+                }, 35000);
 
                 // IMPORTANTE: Tenta dar play automático do vídeo, mas se o navegador travar o som (por causa do F5)...
                 // Ele esconde o som e mostra seu botão de "Desmutar", pra garantir que pelo menos o vídeo continue rodando ao vivo!
