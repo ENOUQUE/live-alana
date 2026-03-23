@@ -194,35 +194,30 @@
         const viewerCount = document.getElementById('viewer-count');
         const salePopup = document.getElementById('sale-popup');
 
-        // --- PROTEÇÃO DEFINITIVA DE ÁUDIO PARA IOS / ANDROID ---
-        // Evita que a música pare ao disputar o canal de voz com o vídeo principal
-        // e garante o loop mecânico infinito caso as tags nativas do Safari falhem.
-        let audioProtegido = false;
-        function protegerAudioMobile() {
-            if(audioProtegido) return;
-            const bgMusic = document.getElementById('bgMusic');
-            if(bgMusic) {
-                try {
-                    // 1. Roteia o áudio pelo engine de Software "Web Audio API" (Deixa o iOS impotente para pausá-lo)
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    const ctx = new AudioContext();
-                    const source = ctx.createMediaElementSource(bgMusic);
-                    source.connect(ctx.destination);
-                    if(ctx.state === 'suspended') ctx.resume();
-                    
-                    // 2. Força o loop na munheca para navegadores que ignoram a tag "loop=true"
-                    bgMusic.addEventListener('ended', function() {
-                        this.currentTime = 0;
-                        this.play().catch(()=>{});
-                    });
-                } catch(e) {}
+        // --- DESTRAVADOR SILENCIOSO PARA IOS/ANDROID ---
+        // Desbloqueia o áudio de forma 100% muda no primeiro toque da tela.
+        // Não emite nenhum som no painel de cadastro e autoriza o celular a tocar depois na sua base!
+        function destravarSilenciosamente() {
+            const som = document.getElementById('bgMusic');
+            if(som) {
+                som.muted = true; // Coloca no mudo para o usuário não ouvir nada vazando!
+                som.play().then(() => {
+                    const modal = document.getElementById('lead-modal');
+                    // Só pausa e desmuta se o usuário ainda não tiver mandado o formulário
+                    if (modal && !modal.classList.contains('animate__fadeOut')) {
+                        som.pause();
+                        som.muted = false; // Tira do mudo, já está autorizado pelo celular!
+                    } else {
+                        som.muted = false; // Se já estava fechando o form, só desmuta e deixa a live tocar
+                    }
+                }).catch(()=>{});
             }
-            audioProtegido = true;
+            document.body.removeEventListener('click', destravarSilenciosamente);
+            document.body.removeEventListener('touchstart', destravarSilenciosamente);
         }
-        // Ativa instantaneamente no 1º milissegundo de contato com a tela sem o usuário notar
-        document.body.addEventListener('click', protegerAudioMobile, {once: true});
-        document.body.addEventListener('touchstart', protegerAudioMobile, {once: true});
-        // -------------------------------------------------------
+        document.body.addEventListener('click', destravarSilenciosamente, {once: true});
+        document.body.addEventListener('touchstart', destravarSilenciosamente, {once: true});
+        // -----------------------------------------------
 
         const nomes = [
             "Marcelo_X", "Gugu_22", "Pai_da_Facul", "VIP_User", "Moreno_Top", "Carlinhos", "User99", "Marcos_Br", "Nando_VIP",
@@ -471,16 +466,6 @@
             btnEntrar.innerHTML = "CARREGANDO...";
             btnEntrar.disabled = true;
 
-            // FIX DE TRAVAMENTO/BUFFERING NO CELULAR: Iniciar o fluxo síncrono agora 
-            // evita pausas indesejáveis na thread de áudio mobile, SEM remover o base de baixo.
-            const bgMusic = document.getElementById('bgMusic');
-            if (bgMusic) {
-                bgMusic.volume = 0.4;
-                bgMusic.play().catch(()=>{});
-            }
-            video.muted = false;
-            video.play().catch(()=>{});
-
             try {
                 // Enviar para o n8n
                 fetch('https://webhook.previas.shop/webhook/pegarlead', {
@@ -496,6 +481,8 @@
 
             // Usa o nome digitado no chat automatico se ja nao tiver 
             if(!meuNome) meuNome = nome;
+
+            const bgMusic = document.getElementById('bgMusic');
 
             // Fechar modal
             leadModal.classList.add('animate__animated', 'animate__fadeOut');
