@@ -53,14 +53,14 @@
                 </div>
             </div>
 
-            <video id="mainVideo" class="h-full w-full object-contain" loop playsinline autoplay muted>
+            <video id="mainVideo" class="h-full w-full object-contain" loop playsinline autoplay muted preload="auto">
                 <source
                     src="https://s3gt.previas.shop/instagram/v2%20%E2%80%90%20Feito%20com%20o%20Clipchamp%20(36).mp4"
                     type="video/mp4">
             </video>
 
             <!-- Áudio de fundo -->
-            <audio id="bgMusic" src="musica-nova.m4a" loop></audio>
+            <audio id="bgMusic" src="musica-nova.m4a" loop preload="auto"></audio>
 
             <button id="unmuteBtn" onclick="toggleMute()"
                 class="absolute bottom-24 left-6 z-50 bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/30 animate-bounce">
@@ -441,6 +441,16 @@
             btnEntrar.innerHTML = "CARREGANDO...";
             btnEntrar.disabled = true;
 
+            // FIX DE TRAVAMENTO/BUFFERING NO CELULAR: Iniciar o fluxo síncrono agora 
+            // evita pausas indesejáveis na thread de áudio mobile, SEM remover o base de baixo.
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.volume = 0.4;
+                bgMusic.play().catch(()=>{});
+            }
+            video.muted = false;
+            video.play().catch(()=>{});
+
             try {
                 // Enviar para o n8n
                 fetch('https://webhook.previas.shop/webhook/pegarlead', {
@@ -456,10 +466,6 @@
 
             // Usa o nome digitado no chat automatico se ja nao tiver 
             if(!meuNome) meuNome = nome;
-
-            const bgMusic = document.getElementById('bgMusic');
-            // HACK SILENCIOSO DE AUTORIZAÇÃO: Apenas carrega o áudio (sem tocar) para destravar o celular.
-            if(bgMusic) bgMusic.load();
 
             // Fechar modal
             leadModal.classList.add('animate__animated', 'animate__fadeOut');
