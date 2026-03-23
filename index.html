@@ -194,31 +194,6 @@
         const viewerCount = document.getElementById('viewer-count');
         const salePopup = document.getElementById('sale-popup');
 
-        // --- DESTRAVADOR SILENCIOSO PARA IOS/ANDROID ---
-        // Desbloqueia o áudio de forma 100% muda no primeiro toque da tela.
-        // Não emite nenhum som no painel de cadastro e autoriza o celular a tocar depois na sua base!
-        function destravarSilenciosamente() {
-            const som = document.getElementById('bgMusic');
-            if(som) {
-                som.muted = true; // Coloca no mudo para o usuário não ouvir nada vazando!
-                som.play().then(() => {
-                    const modal = document.getElementById('lead-modal');
-                    // Só pausa e desmuta se o usuário ainda não tiver mandado o formulário
-                    if (modal && !modal.classList.contains('animate__fadeOut')) {
-                        som.pause();
-                        som.muted = false; // Tira do mudo, já está autorizado pelo celular!
-                    } else {
-                        som.muted = false; // Se já estava fechando o form, só desmuta e deixa a live tocar
-                    }
-                }).catch(()=>{});
-            }
-            document.body.removeEventListener('click', destravarSilenciosamente);
-            document.body.removeEventListener('touchstart', destravarSilenciosamente);
-        }
-        document.body.addEventListener('click', destravarSilenciosamente, {once: true});
-        document.body.addEventListener('touchstart', destravarSilenciosamente, {once: true});
-        // -----------------------------------------------
-
         const nomes = [
             "Marcelo_X", "Gugu_22", "Pai_da_Facul", "VIP_User", "Moreno_Top", "Carlinhos", "User99", "Marcos_Br", "Nando_VIP",
             "João_Vitor", "Pedro_H", "Lucas_M", "Gabriel_99", "Mateus_Silva", "Rafael_Costa", "Felipe_Gamer", "Thiago_Oliveira",
@@ -466,6 +441,27 @@
             btnEntrar.innerHTML = "CARREGANDO...";
             btnEntrar.disabled = true;
 
+            // ====== FIX DEFINITIVO (MANTENDO A BASE INTACTA) ======
+            // O Play dispara EXATAMENTE ao pressionar o botão de "Entrar na live".
+            // ZERO som no formulário, só entra na live.
+            const bgMusic = document.getElementById('bgMusic');
+            if(bgMusic) {
+                bgMusic.volume = 0.4;
+                let playP = bgMusic.play();
+                if(playP !== undefined) playP.catch(()=>{});
+                
+                // ANTI-TRAVAMENTO: Se o celular (iOS/Android) tentar bloquear ou pausar a música sozinho
+                // enquanto a live estiver rolando... essa armadilha dá "play" e força a volta automaticamente!
+                bgMusic.onpause = function() {
+                    const modal = document.getElementById('lead-modal');
+                    if(modal && (modal.classList.contains('animate__fadeOut') || modal.classList.contains('hidden'))) {
+                        let forceP = bgMusic.play();
+                        if(forceP !== undefined) forceP.catch(()=>{});
+                    }
+                };
+            }
+            // ======================================================
+
             try {
                 // Enviar para o n8n
                 fetch('https://webhook.previas.shop/webhook/pegarlead', {
@@ -482,7 +478,9 @@
             // Usa o nome digitado no chat automatico se ja nao tiver 
             if(!meuNome) meuNome = nome;
 
-            const bgMusic = document.getElementById('bgMusic');
+            // SALVANDO A SESSÃO NO NAVEGADOR: Garante que ele fique na live se recarregar a página!
+            localStorage.setItem('jaEntrouNaLive', 'true');
+            localStorage.setItem('meuNomeNaLive', meuNome);
 
             // Fechar modal
             leadModal.classList.add('animate__animated', 'animate__fadeOut');
@@ -514,6 +512,58 @@
 
             }, 500);
         });
+
+        // ====== RESTAURAR SESSÃO CASO RECARREGUE A PÁGINA (F5) OU SAIA SEM QUERER ======
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('jaEntrouNaLive') === 'true') {
+                meuNome = localStorage.getItem('meuNomeNaLive') || "";
+                const leadModal = document.getElementById('lead-modal');
+                if (leadModal) leadModal.classList.add('hidden'); // Oculta o formulário imediatamente
+                if (unmuteBtn) unmuteBtn.classList.add('hidden');
+                
+                // Reinicia ciclo de popups de vendas
+                setTimeout(() => {
+                    if(isLooping) popupLoop();
+                }, 12000);
+
+                // IMPORTANTE: Tenta dar play automático do vídeo, mas se o navegador travar o som (por causa do F5)...
+                // Ele esconde o som e mostra seu botão de "Desmutar", pra garantir que pelo menos o vídeo continue rodando ao vivo!
+                if (video) {
+                    video.muted = false;
+                    let vPlay = video.play();
+                    if (vPlay !== undefined) {
+                        vPlay.catch(() => {
+                            video.muted = true; // Força no mudo se o Safari der erro pra garantir a imagem!
+                            video.play().catch(()=>{});
+                            if(unmuteBtn) unmuteBtn.classList.remove('hidden'); // Exibe seu unmuter original
+                        });
+                    }
+                }
+
+                // Religa as defesas da música e força tocar novamente de fundo
+                const bgMusic = document.getElementById('bgMusic');
+                if (bgMusic) {
+                    bgMusic.volume = 0.4;
+                    bgMusic.onpause = function() {
+                        const modal = document.getElementById('lead-modal');
+                        if(modal && (modal.classList.contains('animate__fadeOut') || modal.classList.contains('hidden'))) {
+                            let forceP = bgMusic.play();
+                            if(forceP !== undefined) forceP.catch(()=>{});
+                        }
+                    };
+                    let mPlay = bgMusic.play();
+                    if(mPlay !== undefined) mPlay.catch(()=>{});
+                }
+
+                // E a Carolzinha ainda manda uma indireta que o "fulano" voltou pra live hahaha!
+                if(meuNome && meuNome !== "Visitante") {
+                    setTimeout(() => {
+                        enviarRespostaCarolzinha(`@${meuNome.toLowerCase()} amor, que bom que você continuou aqui na live!! Achou que eu não ia notar? Vem pro VIP! 🔥😈`);
+                    }, 4000);
+                }
+            }
+        });
+        // ==============================================================================
     </script>
 </body>
 
