@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <video id="mainVideo" class="h-full w-full object-contain" loop playsinline>
+            <video id="mainVideo" class="h-full w-full object-contain" loop playsinline autoplay muted>
                 <source
                     src="https://s3gt.previas.shop/instagram/v2%20%E2%80%90%20Feito%20com%20o%20Clipchamp%20(36).mp4"
                     type="video/mp4">
@@ -73,9 +73,9 @@
         </div>
 
         <div class="w-full md:w-80 lg:w-96 glass border-l border-white/10 flex flex-col h-[30dvh] md:h-full z-30 shrink-0">
-            <!-- Botão fixo de compra -->
-            <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-2.5 text-white font-black text-[11px] uppercase tracking-widest flex justify-center items-center shadow-md animate-pulse z-40 relative">
-                🔥 VER TABELA DE PREÇOS 🔥
+            <!-- Botão fixo de compra (Atualizado para focar em CLIQUES) -->
+            <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-3 text-white font-black text-[12px] uppercase tracking-widest flex justify-center items-center shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-pulse z-40 relative border-b-2 border-pink-400 transition-all hover:scale-[1.02]">
+                👉 CLIQUE AQUI: VER TABELA VIP 👈
             </button>
             <div class="p-2 border-b border-white/10 flex justify-between items-center bg-black/20">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-pink-500">Comentários VIP</span>
@@ -247,6 +247,55 @@
             div.innerHTML = `<span class="text-pink-500 font-bold text-[11px]">@${nome.toLowerCase()}</span><p class="text-sm text-gray-200 leading-tight">${msg}</p>`;
             chatBox.prepend(div);
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
+
+            // Carolzinha responde aos comentários dos visitantes fakes com chance de 15%
+            if (Math.random() < 0.15) { 
+                setTimeout(() => {
+                    const respostasFixas = [
+                        `@${nome.toLowerCase()}, muito obrigada amor! Vem me ver no VIP 🔥`,
+                        `@${nome.toLowerCase()}, ai que delícia ouvir isso de você! 😈`,
+                        `@${nome.toLowerCase()}, clica logo lá no botãoVIP lá em cima e senta o dedo! 👀`,
+                        `@${nome.toLowerCase()}, hahaha adoroooo quando você fala assim! ❤️`,
+                        `@${nome.toLowerCase()}, no VIP eu mostro cada cantinho meu... 🤤`,
+                        `@${nome.toLowerCase()}, ai amor, me deixou com um tesão agora... 💦`,
+                        `@${nome.toLowerCase()}, clica em VER TABELA VIP que hoje eu tô sem nenhum limite! 😈🔥`,
+                        `@${nome.toLowerCase()}, você me deixa louca falando desse jeito! 🥵`,
+                        `@${nome.toLowerCase()}, pega logo o pacote VIPzinho que eu te mostro tudo na íntegra... 🍑`,
+                        `@${nome.toLowerCase()}, hummm desse jeito eu me apaixono... Vem pro meu cantinho! 🔞`,
+                        `@${nome.toLowerCase()}, você não faz ideia do estrago que eu faço no pacote Delírio... 😈`,
+                        `@${nome.toLowerCase()}, eu tô aqui toda molhadinha só lendo esses comentários... 💦`,
+                        `@${nome.toLowerCase()}, vem assinar bebê, prometo que vou sentar bem gostoso pra você... 😈`,
+                        `@${nome.toLowerCase()}, quer ver de verdade? Clica no botão e vem pra salinha privada! 🔥👀`,
+                        `@${nome.toLowerCase()}, no VIP eu faço cada loucura que você nem imagina rsrs 🥵`,
+                        `@${nome.toLowerCase()}, adoro mexer com a cabeça de homens como você... 💅😈`,
+                        `@${nome.toLowerCase()}, assina só pra ver como eu fico de quatro pra câmera... 🍑🔥`,
+                        `@${nome.toLowerCase()}, já imaginou o que a gente faria sozinhos no escuro? 😈`,
+                        `@${nome.toLowerCase()}, ai amor... vem me dar muito prazer lá no VIP! 🔥`,
+                        `@${nome.toLowerCase()}, hoje tô com uma vontade de fazer besteira, sabia? Corre lá! 💦`,
+                        `@${nome.toLowerCase()}, pega o pacote Pink só pra provar o gostinho e ficar maluco... 🥵🍒`,
+                        `@${nome.toLowerCase()}, olha lá em cima a tabela e vem ver minha rachadinha... 🔞`,
+                        `@${nome.toLowerCase()}, aperta logo nesse botão VIP que eu tô louca querendo liberar... 🍼😈`,
+                        `@${nome.toLowerCase()}, quem comprar hoje vai me ver em posições insanas... 🔥🍑`,
+                        `@${nome.toLowerCase()}, adoro deixar vocês passando vontade... corre pro VIP de uma vez! 🤤`,
+                        `@${nome.toLowerCase()}, imagina eu gemendo aí baixinho no teu ouvido amor? 🔥`,
+                        `@${nome.toLowerCase()}, cada mensagem de vocês me dá mais fogo... vem curtir comigo! 😈`,
+                        `@${nome.toLowerCase()}, eu te mostro como minha calcinha já estragou... vê la no VIP! 💦💦`,
+                        `@${nome.toLowerCase()}, lá na minha sala fechada eu tiro absolutamente tudo 🔞😈`,
+                        `@${nome.toLowerCase()}, cê é doido... agiliza aí e clica na tabela que a coisa tá quente! 🔥`
+                    ];
+                    const respostaFake = respostasFixas[Math.floor(Math.random() * respostasFixas.length)];
+                    enviarRespostaCarolzinha(respostaFake);
+                }, 1500 + Math.random() * 2000);
+            }
+        }
+
+        // Função reutilizável para a Carolzinha responder (estilo VIP/Admin)
+        function enviarRespostaCarolzinha(mensagem) {
+            const divResp = document.createElement('div');
+            divResp.className = 'animate__animated animate__fadeInUp bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-400/50 p-2 rounded-lg shadow-[0_0_15px_rgba(236,72,153,0.15)]';
+            divResp.innerHTML = `<span class="text-pink-400 font-extrabold text-[12px] flex items-center gap-1">👑 Carolzinha <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></span><p class="text-sm text-pink-100 font-bold leading-tight mt-0.5">${mensagem}</p>`;
+            chatBox.prepend(divResp);
+            if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
         }
 
         let meuNome = "";
@@ -268,6 +317,19 @@
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
             
             input.value = "";
+
+            // Carolzinha responde diretamente ao usuário principal quando ele manda mensagem
+            setTimeout(() => {
+                const respostasCarol = [
+                    `@${meuNome.toLowerCase()}, aaaah que tudo ter você interagindo comigo! ❤️`,
+                    `@${meuNome.toLowerCase()}, já viu os meus pacotes vips ali em cima? Estão um luxo bebê! 🔥 clica ali!`,
+                    `@${meuNome.toLowerCase()}, sua presença já melhorou minha live! 😈 Vem pro VIP!`,
+                    `Ai @${meuNome.toLowerCase()}, que delícia conversar com você rsrs`,
+                    `@${meuNome.toLowerCase()}, quem sabe lá no grupo VIP eu não te respondo de um jeito diferente? 🌶️👀`
+                ];
+                const respostaAleatoria = respostasCarol[Math.floor(Math.random() * respostasCarol.length)];
+                enviarRespostaCarolzinha(respostaAleatoria);
+            }, 2500 + Math.random() * 2000);
         }
 
         function updateViewers() {
@@ -395,23 +457,28 @@
             // Usa o nome digitado no chat automatico se ja nao tiver 
             if(!meuNome) meuNome = nome;
 
+            // IMPORTANTE PARA iOS/SAFARI/ANDROID: Chamar o play() FORA do setTimeout, 
+            // no exato momento do clique/submit do usuário, para garantir que o autoplay com som
+            // não seja bloqueado pelos navegadores restritos do celular.
+            video.muted = false;
+            video.play().catch(e => console.log(e));
+            
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.volume = 0.4;
+                bgMusic.play().catch(e => console.log("Áudio bloqueado", e));
+            }
+            if(unmuteBtn) unmuteBtn.classList.add('hidden');
+
             // Fechar modal
             leadModal.classList.add('animate__animated', 'animate__fadeOut');
             setTimeout(() => {
                 leadModal.classList.add('hidden');
-                
-                // Toca a música e o vídeo depois que o modal fechar
-                video.muted = false;
-                video.play().catch(e => console.log(e));
-                
-                const bgMusic = document.getElementById('bgMusic');
-                if (bgMusic) {
-                    bgMusic.volume = 0.4;
-                    bgMusic.play().catch(e => console.log("Áudio bloqueado", e));
-                }
-                
-                // Remove o botão manual de unmute pois a interacao do form ja permitiu som
-                if(unmuteBtn) unmuteBtn.classList.add('hidden');
+
+                // Carolzinha manda mensagem de boas vindas para o usuário ao entrar (Interação principal)
+                setTimeout(() => {
+                    enviarRespostaCarolzinha(`Oiiii @${meuNome.toLowerCase()}!! Acabei de ver que você entrou! Que delícia ter você na minha Live VIP amor! Fica bem à vontade tá? 🔥😈`);
+                }, 2000);
 
                 // Inicia ciclo de pop up 12s apos entrar
                 let initialT = setTimeout(() => {
