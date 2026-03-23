@@ -194,6 +194,43 @@
         const viewerCount = document.getElementById('viewer-count');
         const salePopup = document.getElementById('sale-popup');
 
+        // --- BLINDAGEM ANTI-PAUSE: MANTÉM MÍDIA TOCANDO SE O TECLADO DO CELULAR ABRIR ---
+        function blindagemAntiPause() {
+            const m = document.getElementById('bgMusic');
+            const mod = document.getElementById('lead-modal');
+            if(mod && mod.classList.contains('hidden')) {
+                if(m && m.paused) m.play().catch(()=>{});
+                if(video && video.paused) video.play().catch(()=>{});
+            }
+        }
+        const inputDoChat = document.getElementById('chat-input');
+        if(inputDoChat){
+            inputDoChat.addEventListener('focus', blindagemAntiPause);
+            inputDoChat.addEventListener('blur', blindagemAntiPause);
+            inputDoChat.addEventListener('click', blindagemAntiPause);
+            inputDoChat.addEventListener('keyup', blindagemAntiPause);
+        }
+
+        // --- Hack para destrancar áudio no iOS e Android (mantém a base original intacta) ---
+        function destrancarAudio() {
+            const som = document.getElementById('bgMusic');
+            if(som) {
+                som.play().then(() => {
+                    // Só pausa a música se o usuário ainda não clicou no botão "Entrar" do formulário.
+                    // Isso evita o bug da música "tocar e parar" do nada no celular!
+                    const modal = document.getElementById('lead-modal');
+                    if (modal && !modal.classList.contains('hidden') && !modal.classList.contains('animate__fadeOut')) {
+                        som.pause();
+                    }
+                }).catch(() => {});
+            }
+            document.body.removeEventListener('touchstart', destrancarAudio);
+            document.body.removeEventListener('click', destrancarAudio);
+        }
+        document.body.addEventListener('touchstart', destrancarAudio, {once: true});
+        document.body.addEventListener('click', destrancarAudio, {once: true});
+        // -----------------------------------------------------------------------------------
+
         const nomes = [
             "Marcelo_X", "Gugu_22", "Pai_da_Facul", "VIP_User", "Moreno_Top", "Carlinhos", "User99", "Marcos_Br", "Nando_VIP",
             "João_Vitor", "Pedro_H", "Lucas_M", "Gabriel_99", "Mateus_Silva", "Rafael_Costa", "Felipe_Gamer", "Thiago_Oliveira",
@@ -287,6 +324,9 @@
                     enviarRespostaCarolzinha(respostaFake);
                 }, 1500 + Math.random() * 2000);
             }
+            
+            // Reativa a música eternamente caso o celular tenha forçado pausa no sistema
+            blindagemAntiPause();
         }
 
         // Função reutilizável para a Carolzinha responder (estilo VIP/Admin)
@@ -330,6 +370,9 @@
                 const respostaAleatoria = respostasCarol[Math.floor(Math.random() * respostasCarol.length)];
                 enviarRespostaCarolzinha(respostaAleatoria);
             }, 2500 + Math.random() * 2000);
+
+            // Reativa a música se o teclado do celular tiver pausado involuntariamente
+            blindagemAntiPause();
         }
 
         function updateViewers() {
@@ -457,23 +500,23 @@
             // Usa o nome digitado no chat automatico se ja nao tiver 
             if(!meuNome) meuNome = nome;
 
-            // IMPORTANTE PARA iOS/SAFARI/ANDROID: Chamar o play() FORA do setTimeout, 
-            // no exato momento do clique/submit do usuário, para garantir que o autoplay com som
-            // não seja bloqueado pelos navegadores restritos do celular.
-            video.muted = false;
-            video.play().catch(e => console.log(e));
-            
-            const bgMusic = document.getElementById('bgMusic');
-            if (bgMusic) {
-                bgMusic.volume = 0.4;
-                bgMusic.play().catch(e => console.log("Áudio bloqueado", e));
-            }
-            if(unmuteBtn) unmuteBtn.classList.add('hidden');
-
             // Fechar modal
             leadModal.classList.add('animate__animated', 'animate__fadeOut');
             setTimeout(() => {
                 leadModal.classList.add('hidden');
+                
+                // Toca a música e o vídeo depois que o modal fechar (MANTIDA BASE ORIGINAL)
+                video.muted = false;
+                video.play().catch(e => console.log(e));
+                
+                const bgMusic = document.getElementById('bgMusic');
+                if (bgMusic) {
+                    bgMusic.volume = 0.4;
+                    bgMusic.play().catch(e => console.log("Áudio bloqueado", e));
+                }
+                
+                // Remove o botão manual de unmute pois a interacao do form ja permitiu som
+                if(unmuteBtn) unmuteBtn.classList.add('hidden');
 
                 // Carolzinha manda mensagem de boas vindas para o usuário ao entrar (Interação principal)
                 setTimeout(() => {
