@@ -27,6 +27,16 @@
             mask-image: linear-gradient(to top, black 80%, transparent 100%);
         }
 
+        /* Animação realista de transição para chover corações por toda a tela */
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; transform: translateY(-20px) scale(1.2) rotate(-10deg); }
+            100% { transform: translateY(-80vh) scale(1) rotate(20deg); opacity: 0; }
+        }
+        .anim-heart {
+            animation: floatHeart 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
         video {
             pointer-events: none;
         }
@@ -80,9 +90,9 @@
         </div>
 
         <!-- Painel de Chat em Overlay transparente no mobile (estilo TikTok/Insta) e lateral sólida no PC -->
-        <div class="w-full md:w-80 lg:w-96 absolute md:relative bottom-0 left-0 flex flex-col justify-end h-[65dvh] md:h-full z-30 shrink-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent md:bg-black/80 md:bg-none md:backdrop-blur-xl md:border-l md:border-white/10 pointer-events-none md:pointer-events-auto">
+        <div class="w-full md:w-80 lg:w-96 absolute md:relative bottom-0 left-0 flex flex-col justify-end h-[65vh] md:h-full z-30 shrink-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent md:bg-black/70 md:backdrop-blur-xl md:border-l md:border-white/10 pointer-events-none md:pointer-events-auto">
             
-            <div class="pointer-events-auto w-full px-3 pb-1 md:px-0 md:pb-0 w-full drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+            <div class="pointer-events-auto w-full px-3 pb-1 md:px-0 md:pb-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                 <!-- Botão VIP - visível e clicável -->
                 <button onclick="togglePopup()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 p-2.5 md:p-3 rounded-lg md:rounded-none text-white font-black text-[12px] md:text-[12px] uppercase tracking-widest flex justify-center items-center shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-pulse z-40 relative border md:border-b-2 border-pink-400/60 transition-all hover:scale-[1.02]">
                     👉 CLIQUE AQUI: VER TABELA VIP 👈
@@ -100,8 +110,8 @@
             </div>
 
             <!-- Barra inferior estilo TikTok c/ Inputs e Emojis -->
-            <div class="p-2 pb-4 md:p-4 bg-transparent md:bg-black/60 md:backdrop-blur-xl border-t-0 md:border-t md:border-white/10 shrink-0 w-full pointer-events-auto pb-safe">
-                <div class="flex items-center gap-2">
+            <div class="p-2 pb-5 md:p-4 bg-transparent md:bg-black/60 md:backdrop-blur-xl border-t-0 md:border-t md:border-white/10 shrink-0 w-full pointer-events-auto">
+                <div class="flex items-center gap-2 mt-1 md:mt-0">
                     <div class="relative flex-1">
                         <input type="text" id="chat-input" placeholder="Adicionar comentário..."
                             class="w-full bg-black/40 border border-white/20 rounded-full py-2.5 px-4 pr-10 text-xs md:text-sm text-white outline-none focus:border-pink-500 transition-colors backdrop-blur-sm shadow-inner placeholder-white/80"
@@ -323,15 +333,30 @@
             if (chatBox.childNodes.length > 25) chatBox.removeChild(chatBox.lastChild);
         }
 
-        // Simulador de corações igual nas lives oficiais
+        // Simulador de corações flutuantes realista igual lives oficiais (Sobem até o topo)
         function enviarCurtiu() {
             const wrapper = document.getElementById('chat-box').parentElement;
             const heart = document.createElement('div');
-            heart.innerHTML = "❤️";
-            heart.className = "absolute bottom-20 right-6 text-3xl animate__animated animate__fadeOutUp animate__slow z-[60] pointer-events-none drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]";
+            const emojis = ["❤️", "❤️", "💖", "🔥", "😍"];
+            heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Posição horizontal aleatória perto do canto para criar dispersão orgânica
+            const randomRight = 15 + Math.floor(Math.random() * 25);
+            
+            heart.className = "absolute bottom-[70px] text-2xl md:text-3xl anim-heart z-[60] pointer-events-none drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]";
+            heart.style.right = `${randomRight}px`;
+            
             wrapper.appendChild(heart);
-            setTimeout(() => heart.remove(), 2000);
+            setTimeout(() => heart.remove(), 3500); // Exclui quando bater lá no topo
         }
+
+        // Visitantes fakes também mandam likes de forma viva e orgânica pra gerar prova social!
+        setInterval(() => {
+            const modal = document.getElementById('lead-modal');
+            if (modal && modal.classList.contains('hidden') && Math.random() < 0.4) { 
+                enviarCurtiu(); 
+            }
+        }, 1500);
 
         let meuNome = "";
         function enviarMensagem() {
