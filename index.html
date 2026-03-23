@@ -537,10 +537,10 @@
                 if (leadModal) leadModal.classList.add('hidden'); // Oculta o formulário imediatamente
                 if (unmuteBtn) unmuteBtn.classList.add('hidden');
                 
-                // Reinicia ciclo de popups de vendas
+                // Reinicia ciclo de popups de vendas mais pausado
                 setTimeout(() => {
                     if(isLooping) popupLoop();
-                }, 12000);
+                }, 25000);
 
                 // IMPORTANTE: Tenta dar play automático do vídeo, mas se o navegador travar o som (por causa do F5)...
                 // Ele esconde o som e mostra seu botão de "Desmutar", pra garantir que pelo menos o vídeo continue rodando ao vivo!
