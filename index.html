@@ -502,22 +502,23 @@
             localStorage.setItem('jaEntrouNaLive', 'true');
             localStorage.setItem('meuNomeNaLive', meuNome);
 
-            // Fechar modal
+            // Toca a música e o vídeo exata e magicamente NO CLIQUE agora mesmo (antes do delay do fechamento)
+            // ISSO FAZ O IOS/ANDROID ATIVAREM O SOM DE CARA SEM BLOQUEIOS
+            // (MANTIDA BASE ORIGINAL EXATAMENTE IGUAL)
+            video.muted = false;
+            video.play().catch(e => console.log(e));
+            
+            if (bgMusic) {
+                bgMusic.volume = 0.4;
+                bgMusic.play().catch(e => console.log("Áudio bloqueado", e));
+            }
+            
+            if(unmuteBtn) unmuteBtn.classList.add('hidden');
+
+            // Fechar modal visualmente suavizado em meio segundo
             leadModal.classList.add('animate__animated', 'animate__fadeOut');
             setTimeout(() => {
                 leadModal.classList.add('hidden');
-                
-                // Toca a música e o vídeo depois que o modal fechar (MANTIDA BASE ORIGINAL EXATAMENTE IGUAL)
-                video.muted = false;
-                video.play().catch(e => console.log(e));
-                
-                if (bgMusic) {
-                    bgMusic.volume = 0.4;
-                    bgMusic.play().catch(e => console.log("Áudio bloqueado", e));
-                }
-                
-                // Remove o botão manual de unmute pois a interacao do form ja permitiu som
-                if(unmuteBtn) unmuteBtn.classList.add('hidden');
 
                 // Carolzinha manda mensagem de boas vindas para o usuário ao entrar (Interação principal)
                 setTimeout(() => {
