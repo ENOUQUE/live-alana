@@ -584,12 +584,16 @@
             const painel = document.getElementById('chat-panel');
             const btAbrir = document.getElementById('btn-toggle-chat');
             if(painel && btAbrir) {
-                // Desliza verticalmente fazendo o "fade out" do chat e sumindo magicamente
+                // Esconde e tira o painel fisicamente do FlexBox (vídeo engole a tela toda)
                 painel.classList.remove('translate-y-0', 'opacity-100');
                 painel.classList.add('translate-y-[20%]', 'opacity-0');
-                setTimeout(() => painel.style.pointerEvents = 'none', 350);
                 
-                // Brota o belíssimo botão com ícone de balão de mensagem para ele reabrir a live
+                setTimeout(() => {
+                    painel.classList.add('hidden'); // Mata a altura
+                    painel.style.pointerEvents = 'none';
+                }, 300); // 300ms pra dar tempo da animação acabar suave
+                
+                // Brota o botão flutuante para reabrir no cantinho isolado do video
                 btAbrir.classList.remove('opacity-0', 'pointer-events-none');
                 btAbrir.classList.add('opacity-100', 'pointer-events-auto');
             }
@@ -599,16 +603,20 @@
             const painel = document.getElementById('chat-panel');
             const btAbrir = document.getElementById('btn-toggle-chat');
             if(painel && btAbrir) {
-                // Sobe a caixa de volta para o front-end
-                painel.style.pointerEvents = '';
-                painel.classList.remove('translate-y-[20%]', 'opacity-0');
-                painel.classList.add('translate-y-0', 'opacity-100');
+                // Devolve pro fluxo do FlexBox e empurra o video pra cima de novo
+                painel.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    painel.style.pointerEvents = '';
+                    painel.classList.remove('translate-y-[20%]', 'opacity-0');
+                    painel.classList.add('translate-y-0', 'opacity-100');
+                }, 50); // delay minimo pro display:block renderizar
                 
                 // Murcha o botãozinho de comentar do canto
                 btAbrir.classList.add('opacity-0', 'pointer-events-none');
                 btAbrir.classList.remove('opacity-100', 'pointer-events-auto');
                 
-                // Ousadia Extra: Foco automático para o cara já voltar digitando maravilhado!
+                // Foco automático para a pessoa voltar digitando maravilhado!
                 setTimeout(() => {
                     const inp = document.getElementById('chat-input');
                     if(inp) inp.focus();
